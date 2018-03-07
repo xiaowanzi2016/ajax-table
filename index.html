@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>用ajax实现表格的分页</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./fuzhu.css">
+</head>
+<body>
+	
+	<div class="wrapper">
+		<div class="table">
+			<table class="table table-striped">
+				<caption>豆瓣电影top250</caption>
+				<thead>
+					<th>序列</th>
+      				<th>电影名称</th>
+      				<th>等级</th>
+      				<th>评分</th>
+      				<th>评论人数</th>
+				</thead>
+				<tbody  id="content">
+				</tbody>
+			</table>
+		</div>
+		<div id="foot">
+			<span class="summary"></span>
+			<ul id="pagination">
+        		<li id="01"><a>首页</a></li>
+        		<li id="02"><a>上一页</a></li>
+        		<li id="03"><a>下一页</a></li>
+        		<li id="04"><a>最后一页</a></li>
+    		</ul>
+    		<div id="select">
+        		<span>跳转到 </span>
+        		<input type="text" name="page_num"  id="num">
+        		<span> 页  </span>
+        		<input type="button" name="go_btn" value="跳转" id="click">
+    		</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery.js"></script>
+      <!-- 包括所有已编译的插件 -->
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    	var page=1;//定义是第几页
+		
+    	function getPage(page){$.ajax({
+    		type:"POST",
+    		url:"./data.php",
+    		data:{'page':page},
+    		success: function(response){
+    			response=JSON.parse(response);
+    			//alert(typeof(response));
+    			var s='';
+    		for(var i=0;i<response.id.length;i++)  
+    			{ 
+    			  	s+='<tr><td>'+response.id[i]+'</td>'+'<td>'+response.name[i]+'</td>'
+    					+'<td>'+response.ranking[i]+'</td>'+'<td>'+response.score[i]+'</td>'+'<td>'+response.score_num[i]+'</td></tr>';
+    				$("#content").html(s);
+    			}
+    		}
+    		})}
+        getPage(page);
+        $(function(){
+        	$("#01").click(function(){
+        		page=1;
+        		getPage(page);
+        	});
+        	$("#02").click(function(){
+        		page=page-1;
+        		getPage(page);
+        	});
+        	$("#03").click(function(){
+        		if(page<50)
+        		{
+        			page=page+1;
+        		    //alert(page);
+        		    getPage(page);
+        		}
+        		else
+        		{
+        			page=50;//由于知道数据库中有多少条数据
+        			getPage(page);
+        		}
+
+        	});
+        	$("#04").click(function(){
+        		page=50;//由于知道数据库中有多少条数据
+        		getPage(page);
+        	})
+       	});
+       	$("#click").click(function(){
+       		page=$("#num").val();
+       		if(page<=50)
+       			{getPage(page);}
+       		else
+       			return false
+       	})
+    </script>
+</body>
+</html>

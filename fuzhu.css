@@ -1,0 +1,27 @@
+.wrapper{
+	width:100%;
+	height:500px;
+}
+#foot{
+	position:absolute;
+	right:200px;
+
+}
+#pagination{display:inline-block}
+#pagination li{
+  display: inline;
+}
+#select{display:inline-block;margin-left:50px}
+#select input[type="text"]{
+  width: 30px;
+  height: 20px;
+  
+  border-width: 1px;
+}
+caption{
+	text-align: center;
+	font-size:50px;
+}
+td,th{
+	text-align: center;
+}
